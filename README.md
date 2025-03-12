@@ -1,0 +1,1 @@
+## fast_blog project
