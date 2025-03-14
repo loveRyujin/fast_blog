@@ -1,0 +1,8 @@
+mysql:
+  addr: 127.0.0.1:3306
+  username: ryujin
+  password: LCSZBD20030208lc!
+  database: fastgo
+  max-idle-connections: 10
+  max-open-connections: 100
+  max-connection-life-time: 10s
