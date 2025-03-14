@@ -1,7 +1,6 @@
 package app
 
 import (
-	"encoding/json"
 	"fmt"
 
 	"github.com/onexstack_practice/fast_blog/cmd/fb-apiserver/app/options"
@@ -24,37 +23,41 @@ func NewFastBlogCommand() *cobra.Command {
 		SilenceUsage: true,
 		// 指定调用cmd.Execute()时的执行的Run函数
 		RunE: func(cmd *cobra.Command, args []string) error {
-			// 从配置文件中读取配置
-			if err := viper.Unmarshal(opts); err != nil {
-				fmt.Printf("读取配置文件失败: %v", err)
-				return err
-			}
-
-			// 验证配置
-			if err := opts.Validate(); err != nil {
-				fmt.Printf("验证配置失败: %v", err)
-				return err
-			}
-
-			fmt.Printf("Read Mysql addr from Viper: %s\n\n", viper.GetString("mysql.addr"))
-			fmt.Printf("Read Mysql username from Viper: %s\n\n", viper.GetString("mysql.username"))
-
-			jsonData, err := json.MarshalIndent(opts, "", "  ")
-			if err != nil {
-				fmt.Printf("序列化配置失败: %v", err)
-				return err
-			}
-			fmt.Println(string(jsonData))
-
-			return nil
+			return run(opts)
 		},
 		// 设置命令的参数检查，无需传入参数
 		Args: cobra.NoArgs,
 	}
 
+	// 初始化配置函数，每个命令执行时调用
 	cobra.OnInitialize(OnInitialize)
 
+	// 将命令行参数解析到变量当中
 	cmd.PersistentFlags().StringVarP(&configPath, "config", "c", "", "path to fb-apiserver confuguration file.")
 
 	return cmd
+}
+
+func run(opts *options.ServerOptions) error {
+	// 从配置文件中读取配置
+	if err := viper.Unmarshal(opts); err != nil {
+		fmt.Printf("读取配置文件失败: %v", err)
+		return err
+	}
+
+	// 验证配置
+	if err := opts.Validate(); err != nil {
+		fmt.Printf("验证配置失败: %v", err)
+		return err
+	}
+
+	// 获取应用配置.
+	// 将命令行选项和应用配置分开，方便灵活处理两种不同类型的配置
+	cfg := opts.Config()
+
+	// 创建服务器实例
+	server := cfg.NewServer()
+
+	// 启动服务器
+	return server.Run()
 }
