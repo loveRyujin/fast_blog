@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/onexstack_practice/fast_blog/cmd/fb-apiserver/app/options"
+	"github.com/onexstack_practice/fast_blog/pkg/version"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -35,10 +36,15 @@ func NewFastBlogCommand() *cobra.Command {
 	// 将命令行参数解析到变量当中
 	cmd.PersistentFlags().StringVarP(&configPath, "config", "c", "", "path to fb-apiserver confuguration file.")
 
+	// 增加--version标志
+	version.AddFlags(cmd.PersistentFlags())
+
 	return cmd
 }
 
 func run(opts *options.ServerOptions) error {
+	// 如果命令行参数中包含--version，则打印版本信息并退出
+	version.PrintAndExitIfRequested()
 	// 从配置文件中读取配置
 	if err := viper.Unmarshal(opts); err != nil {
 		fmt.Printf("读取配置文件失败: %v", err)
