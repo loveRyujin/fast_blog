@@ -80,7 +80,7 @@ func AddFlags(fs *flag.FlagSet) {
 func PrintAndExitIfRequested() {
 	// 检查版本信息的值并打印相应的信息
 	if *versionFlag == VersionRaw {
-		fmt.Printf("%s\n", Get().ToText())
+		fmt.Printf("%s\n", Get().Text())
 		os.Exit(0)
 	} else if *versionFlag == VersionEnable {
 		fmt.Printf("%s\n", Get().String())
