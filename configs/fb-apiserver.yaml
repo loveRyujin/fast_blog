@@ -1,8 +1,13 @@
 mysql:
   addr: 127.0.0.1:3306
-  username: 
+  username: ryujin
   password: LCSZBD20030208lc!
   database: fastgo
   max-idle-connections: 100
   max-open-connections: 100
   max-connection-life-time: 10s
+
+log:
+  level: info
+  format: text
+  output: stdout

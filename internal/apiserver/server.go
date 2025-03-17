@@ -1,7 +1,7 @@
 package apiserver
 
 import (
-	"fmt"
+	"log/slog"
 
 	genericclioptions "github.com/onexstack_practice/fast_blog/pkg/options"
 )
@@ -23,7 +23,7 @@ func (cfg *Config) NewServer() *Server {
 }
 
 func (s *Server) Run() error {
-	fmt.Printf("Read Mysql addr from Viper: %s\n\n", s.Config.MysqlOptions.Addr)
+	slog.Info("Read Mysql addr from Viper", "mysql.addr", s.Config.MysqlOptions.Addr)
 
 	select {}
 }

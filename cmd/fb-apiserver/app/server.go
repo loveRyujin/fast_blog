@@ -2,6 +2,9 @@ package app
 
 import (
 	"fmt"
+	"io"
+	"log/slog"
+	"os"
 
 	"github.com/onexstack_practice/fast_blog/cmd/fb-apiserver/app/options"
 	"github.com/onexstack_practice/fast_blog/pkg/version"
@@ -45,6 +48,10 @@ func NewFastBlogCommand() *cobra.Command {
 func run(opts *options.ServerOptions) error {
 	// 如果命令行参数中包含--version，则打印版本信息并退出
 	version.PrintAndExitIfRequested()
+
+	// 初始化日志
+	initLog()
+
 	// 从配置文件中读取配置
 	if err := viper.Unmarshal(opts); err != nil {
 		fmt.Printf("读取配置文件失败: %v", err)
@@ -66,4 +73,59 @@ func run(opts *options.ServerOptions) error {
 
 	// 启动服务器
 	return server.Run()
+}
+
+func initLog() {
+	slevel := getLogLevel()
+	sopts := &slog.HandlerOptions{Level: slevel}
+	soutput := getLogOutput()
+	handler := getLogHandler(soutput, sopts)
+	slog.SetDefault(slog.New(handler))
+}
+
+// getLogLevel 从配置文件中获取日志级别
+func getLogLevel() slog.Level {
+	level := viper.GetString("log.level")
+	switch level {
+	case "debug":
+		return slog.LevelDebug
+	case "info":
+		return slog.LevelInfo
+	case "warn":
+		return slog.LevelWarn
+	case "error":
+		return slog.LevelError
+	default:
+		return slog.LevelInfo
+	}
+}
+
+// getLogOutput 从配置文件中获取日志输出
+func getLogOutput() io.Writer {
+	output := viper.GetString("log.output")
+	switch output {
+	case "":
+		return os.Stdout
+	case "stdout":
+		return os.Stdout
+	default:
+		fd, err := os.OpenFile(output, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+		if err != nil {
+			panic(err)
+		}
+		return fd
+	}
+}
+
+// getLogHandler 根据配置文件配置获取日志处理器
+func getLogHandler(output io.Writer, opts *slog.HandlerOptions) slog.Handler {
+	format := viper.GetString("log.format")
+	switch format {
+	case "json":
+		return slog.NewJSONHandler(output, opts)
+	case "text":
+		return slog.NewTextHandler(output, opts)
+	default:
+		return slog.NewJSONHandler(output, opts)
+	}
 }
