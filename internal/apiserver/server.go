@@ -11,6 +11,8 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/onexstack_practice/fast_blog/internal/pkg/core"
+	"github.com/onexstack_practice/fast_blog/internal/pkg/errorx"
 	mw "github.com/onexstack_practice/fast_blog/internal/pkg/middleware"
 	genericclioptions "github.com/onexstack_practice/fast_blog/pkg/options"
 )
@@ -36,12 +38,12 @@ func (cfg *Config) NewServer() *Server {
 
 	// 注册404Handler
 	engine.NoRoute(func(c *gin.Context) {
-		c.JSON(http.StatusNotFound, gin.H{"message": "404 Not Found."})
+		core.WriteResponse(c, errorx.ErrNotFound, nil)
 	})
 
 	// 注册/healthz路由
 	engine.GET("/healthz", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{"status": "ok"})
+		core.WriteResponse(c, nil, gin.H{"status": "ok"})
 	})
 
 	// 创建httpServer实例
