@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	mw "github.com/onexstack_practice/fast_blog/internal/pkg/middleware"
 	genericclioptions "github.com/onexstack_practice/fast_blog/pkg/options"
 )
 
@@ -23,6 +24,10 @@ type Server struct {
 
 func (cfg *Config) NewServer() *Server {
 	engine := gin.New()
+
+	// 注册全局中间件
+	middlewares := []gin.HandlerFunc{gin.Recovery(), mw.NoCache(), mw.Cors(), mw.RequestID()}
+	engine.Use(middlewares...)
 
 	// 注册404Handler
 	engine.NoRoute(func(c *gin.Context) {
