@@ -1,9 +1,14 @@
 package apiserver
 
 import (
+	"context"
 	"errors"
 	"log/slog"
 	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	mw "github.com/onexstack_practice/fast_blog/internal/pkg/middleware"
@@ -55,8 +60,30 @@ func (s *Server) Run() error {
 	slog.Info("Read Mysql addr from Viper", "mysql.addr", s.Config.MysqlOptions.Addr)
 	slog.Info("Start to listen the incoming request on http address", "addr", s.Config.Addr)
 
-	if err := s.srv.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
+	go func() {
+		if err := s.srv.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
+			slog.Error(err.Error())
+			os.Exit(1)
+		}
+	}()
+
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+	<-quit
+
+	slog.Info("Shutdown Server ...")
+
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	// 先关闭依赖的服务，再关闭被依赖的服务
+	// 10s内关闭所有服务，超过10s就超时退出
+	if err := s.srv.Shutdown(ctx); err != nil {
+		slog.Error("Insecure Server forced to shutdown:", "err", err)
 		return err
 	}
+
+	slog.Info("Server exited")
+
 	return nil
 }
