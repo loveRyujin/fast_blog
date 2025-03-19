@@ -7,6 +7,8 @@ import (
 	"github.com/onexstack_practice/fast_blog/internal/pkg/errorx"
 )
 
+// ErrorResponse 是通用的错误响应结构体
+// 用于API请求发生错误时返回统一的格式化错误信息
 type ErrorResponse struct {
 	// 错误原因，表示错误类型
 	Reason string `json:"reason,omitempty"`
