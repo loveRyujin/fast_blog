@@ -13,4 +13,8 @@ var (
 	ErrDBWrite = New(http.StatusInternalServerError, "InternalError.DBWrite", "Database write error")
 	// ErrDBRead 表示数据库读取错误
 	ErrDBRead = New(http.StatusInternalServerError, "InternalError.DBRead", "Database read error")
+	// ErrBind 表示请求参数绑定错误
+	ErrBind = New(http.StatusBadRequest, "BindError", "Request parameter binding error")
+	// ErrInvalidArugment 表示参数验证失败
+	ErrInvalidArugment = New(http.StatusBadRequest, "InvalidArgument", "Argument valification failed")
 )

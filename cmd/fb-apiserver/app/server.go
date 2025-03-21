@@ -69,7 +69,10 @@ func run(opts *options.ServerOptions) error {
 	cfg := opts.Config()
 
 	// 创建服务器实例
-	server := cfg.NewServer()
+	server, err := cfg.NewServer()
+	if err != nil {
+		return err
+	}
 
 	// 启动服务器
 	return server.Run()

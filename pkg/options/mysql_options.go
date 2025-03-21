@@ -5,6 +5,9 @@ import (
 	"net"
 	"strconv"
 	"time"
+
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 )
 
 const (
@@ -81,4 +84,43 @@ func (o *MysqlOptions) Validate() error {
 	}
 
 	return nil
+}
+
+// DSN return DSN from MySQLOptions.
+func (o *MysqlOptions) DSN() string {
+	return fmt.Sprintf(`%s:%s@tcp(%s)/%s?charset=utf8&parseTime=%t&loc=%s`,
+		o.Username,
+		o.Password,
+		o.Addr,
+		o.Database,
+		true,
+		"Local")
+}
+
+// NewDB create mysql store with the given config.
+func (o *MysqlOptions) NewDB() (*gorm.DB, error) {
+	db, err := gorm.Open(mysql.Open(o.DSN()), &gorm.Config{
+		// PrepareStmt executes the given query in cached statement.
+		// This can improve performance.
+		PrepareStmt: true,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	sqlDB, err := db.DB()
+	if err != nil {
+		return nil, err
+	}
+
+	// SetMaxOpenConns sets the maximum number of open connections to the database.
+	sqlDB.SetMaxOpenConns(o.MaxOpenConnections)
+
+	// SetConnMaxLifetime sets the maximum amount of time a connection may be reused.
+	sqlDB.SetConnMaxLifetime(o.MaxConnectionLifeTime)
+
+	// SetMaxIdleConns sets the maximum number of connections in the idle connection pool.
+	sqlDB.SetMaxIdleConns(o.MaxIdleConnections)
+
+	return db, nil
 }
