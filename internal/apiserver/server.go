@@ -17,14 +17,18 @@ import (
 	"github.com/onexstack_practice/fast_blog/internal/apiserver/store"
 	"github.com/onexstack_practice/fast_blog/internal/pkg/core"
 	"github.com/onexstack_practice/fast_blog/internal/pkg/errorx"
+	"github.com/onexstack_practice/fast_blog/internal/pkg/known"
 	mw "github.com/onexstack_practice/fast_blog/internal/pkg/middleware"
 	genericclioptions "github.com/onexstack_practice/fast_blog/pkg/options"
+	"github.com/onexstack_practice/fast_blog/pkg/token"
 )
 
 // Config存储应用配置
 type Config struct {
 	MysqlOptions *genericclioptions.MysqlOptions
 	Addr         string
+	JWTKey       string
+	Expiration   time.Duration
 }
 
 // Server是一个服务器结构体类型
@@ -34,6 +38,8 @@ type Server struct {
 }
 
 func (cfg *Config) NewServer() (*Server, error) {
+	token.Init(cfg.JWTKey, known.XUserID, cfg.Expiration)
+	// 创建gin引擎
 	engine := gin.New()
 
 	// 注册全局中间件
