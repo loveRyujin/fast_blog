@@ -11,10 +11,13 @@ import (
 	"github.com/onexstack_practice/fast_blog/internal/apiserver/pkg/conversion"
 	"github.com/onexstack_practice/fast_blog/internal/apiserver/store"
 	"github.com/onexstack_practice/fast_blog/internal/pkg/contextx"
+	"github.com/onexstack_practice/fast_blog/internal/pkg/errorx"
 	"github.com/onexstack_practice/fast_blog/internal/pkg/known"
 	"golang.org/x/sync/errgroup"
 
 	apiv1 "github.com/onexstack_practice/fast_blog/pkg/api/apiserver/v1"
+	"github.com/onexstack_practice/fast_blog/pkg/auth"
+	"github.com/onexstack_practice/fast_blog/pkg/token"
 )
 
 // UserBiz 定义处理用户请求所需的方法.
@@ -30,6 +33,8 @@ type UserBiz interface {
 
 // UserExpansion 定义用户操作的扩展方法.
 type UserExpansion interface {
+	Login(ctx context.Context, rq *apiv1.LoginRequest) (*apiv1.LoginResponse, error)
+	RefreshToken(ctx context.Context, rq *apiv1.RefreshTokenRequest) (*apiv1.RefreshTokenResponse, error)
 }
 
 // userBiz 是 UserBiz 接口的实现.
@@ -42,6 +47,40 @@ var _ UserBiz = (*userBiz)(nil)
 
 func New(store store.IStore) *userBiz {
 	return &userBiz{store: store}
+}
+
+// Login 实现 UserExpansion 接口中的 Login 方法.
+func (b *userBiz) Login(ctx context.Context, rq *apiv1.LoginRequest) (*apiv1.LoginResponse, error) {
+	// 通过用户名获取用户信息
+	userM, err := b.store.User().Get(ctx, where.F("username", rq.Username))
+	if err != nil {
+		return nil, errorx.ErrUserNotFound
+	}
+
+	// 比较密码是否正确
+	if err := auth.Compare(userM.Password, rq.Password); err != nil {
+		return nil, errorx.ErrPasswordInvalid
+	}
+
+	// 登录成功，签发token并返回
+	token, expireAt, err := token.Sign(userM.UserID)
+	if err != nil {
+		return nil, errorx.ErrSignToken
+	}
+
+	return &apiv1.LoginResponse{Token: token, ExpireAt: expireAt}, nil
+}
+
+// RefreshToken 实现 UserExpansion 接口中的 RefreshToken 方法.
+func (b *userBiz) RefreshToken(ctx context.Context, rq *apiv1.RefreshTokenRequest) (*apiv1.RefreshTokenResponse, error) {
+	slog.Debug("debug", "userID", contextx.UserID(ctx))
+	// 刷新 token
+	token, expireAt, err := token.Sign(contextx.UserID(ctx))
+	if err != nil {
+		return nil, errorx.ErrSignToken.WithMessage(err.Error())
+	}
+
+	return &apiv1.RefreshTokenResponse{Token: token, ExpireAt: expireAt}, nil
 }
 
 // Create 实现 UserBiz 接口中的 Create 方法.

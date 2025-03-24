@@ -9,6 +9,54 @@ import (
 	v1 "github.com/onexstack_practice/fast_blog/pkg/api/apiserver/v1"
 )
 
+// Login 用户登录
+func (h *Handler) Login(c *gin.Context) {
+	slog.Info("Login function called")
+
+	var request v1.LoginRequest
+	if err := c.ShouldBindJSON(&request); err != nil {
+		core.WriteResponse(c, errorx.ErrBind, nil)
+		return
+	}
+
+	if err := h.validator.ValidateLoginRequest(c.Request.Context(), &request); err != nil {
+		core.WriteResponse(c, errorx.ErrInvalidArugment.WithMessage(err.Error()), nil)
+		return
+	}
+
+	resp, err := h.biz.UserV1().Login(c.Request.Context(), &request)
+	if err != nil {
+		core.WriteResponse(c, err, nil)
+		return
+	}
+
+	core.WriteResponse(c, nil, resp)
+}
+
+// RefreshToken 刷新token
+func (h *Handler) RefreshToken(c *gin.Context) {
+	slog.Info("Refresh token function called")
+
+	var request v1.RefreshTokenRequest
+	if err := c.ShouldBindJSON(&request); err != nil {
+		core.WriteResponse(c, errorx.ErrBind, nil)
+		return
+	}
+
+	if err := h.validator.ValidateRefreshTokenRequest(c.Request.Context(), &request); err != nil {
+		core.WriteResponse(c, errorx.ErrInvalidArugment.WithMessage(err.Error()), nil)
+		return
+	}
+
+	resp, err := h.biz.UserV1().RefreshToken(c.Request.Context(), &request)
+	if err != nil {
+		core.WriteResponse(c, err, nil)
+		return
+	}
+
+	core.WriteResponse(c, nil, resp)
+}
+
 // CreateUser 创建用户
 func (h *Handler) CreateUser(c *gin.Context) {
 	slog.Info("Create user function call")
@@ -19,12 +67,12 @@ func (h *Handler) CreateUser(c *gin.Context) {
 		return
 	}
 
-	if err := h.validator.ValidateCreateUserRequest(c, &request); err != nil {
+	if err := h.validator.ValidateCreateUserRequest(c.Request.Context(), &request); err != nil {
 		core.WriteResponse(c, errorx.ErrInvalidArugment.WithMessage(err.Error()), nil)
 		return
 	}
 
-	resp, err := h.biz.UserV1().Create(c, &request)
+	resp, err := h.biz.UserV1().Create(c.Request.Context(), &request)
 	if err != nil {
 		core.WriteResponse(c, err, nil)
 		return

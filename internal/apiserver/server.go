@@ -38,6 +38,7 @@ type Server struct {
 }
 
 func (cfg *Config) NewServer() (*Server, error) {
+	// 初始化 JWT token
 	token.Init(cfg.JWTKey, known.XUserID, cfg.Expiration)
 	// 创建gin引擎
 	engine := gin.New()
@@ -82,7 +83,10 @@ func (cfg *Config) SetupRouter(engine *gin.Engine, store store.IStore) {
 	// 创建核心业务处理器
 	handler := handler.NewHandler(biz.NewBiz(store), validation.NewValidator(store))
 
-	authMiddlewares := []gin.HandlerFunc{}
+	engine.POST("/login", handler.Login)
+	engine.POST("/refresh-token", mw.Authn(), handler.RefreshToken)
+
+	authMiddlewares := []gin.HandlerFunc{mw.Authn()}
 
 	// 注册 v1 版本 API 路由分组
 	v1 := engine.Group("/v1")
@@ -92,6 +96,7 @@ func (cfg *Config) SetupRouter(engine *gin.Engine, store store.IStore) {
 		{
 			// 创建用户。这里要注意：创建用户是不用进行认证和授权的
 			userv1.POST("", handler.CreateUser)
+			userv1.Use(authMiddlewares...)
 			userv1.PUT(":userID", handler.UpdateUser)    // 更新用户信息
 			userv1.DELETE(":userID", handler.DeleteUser) // 删除用户
 			userv1.GET(":userID", handler.GetUser)       // 查询用户详情

@@ -24,6 +24,34 @@ type User struct {
 	UpdatedAt time.Time `json:"updatedAt"`
 }
 
+// LoginRequest 表示登录请求
+type LoginRequest struct {
+	// username 表示用户名称
+	Username string `json:"username"`
+	// password 表示用户密码
+	Password string `json:"password"`
+}
+
+// LoginResponse 表示登录响应
+type LoginResponse struct {
+	// token 表示登录成功后返回的 token
+	Token string `json:"token"`
+	// expireAt 表示 token 过期时间
+	ExpireAt time.Time `json:"expireAt"`
+}
+
+// RefreshTokenRequest 表示刷新 token 请求
+type RefreshTokenRequest struct {
+}
+
+// RefreshTokenResponse 表示刷新 token 响应
+type RefreshTokenResponse struct {
+	// token 表示刷新后的 token
+	Token string `json:"token"`
+	// expireAt 表示 刷新过后的token 过期时间
+	ExpireAt time.Time `json:"expireAt"`
+}
+
 // CreateUserRequest 表示创建用户请求
 type CreateUserRequest struct {
 	// username 表示用户名称

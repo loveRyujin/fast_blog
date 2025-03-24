@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net"
 	"strconv"
+	"time"
 
 	"github.com/onexstack_practice/fast_blog/internal/apiserver"
 	genericoptions "github.com/onexstack_practice/fast_blog/pkg/options"
@@ -13,12 +14,15 @@ import (
 type ServerOptions struct {
 	MysqlOptions *genericoptions.MysqlOptions `json:"mysql" mapstructure:"mysql"`
 	Addr         string                       `json:"addr" mapstructure:"addr"`
+	JWTKey       string                       `json:"jwt-key" mapstructure:"jwt-key"`
+	Expiration   time.Duration                `json:"expiration" mapstructure:"expiration"`
 }
 
 func NewServerOptions() *ServerOptions {
 	return &ServerOptions{
 		MysqlOptions: genericoptions.NewMysqlOptions(),
 		Addr:         "0.0.0.0:6666",
+		Expiration:   2 * time.Hour,
 	}
 }
 
@@ -45,9 +49,12 @@ func (o *ServerOptions) Validate() error {
 	return nil
 }
 
+// Config 基于ServerOptions配置生成apiserver.Config
 func (o *ServerOptions) Config() *apiserver.Config {
 	return &apiserver.Config{
 		MysqlOptions: o.MysqlOptions,
 		Addr:         o.Addr,
+		JWTKey:       o.JWTKey,
+		Expiration:   o.Expiration,
 	}
 }

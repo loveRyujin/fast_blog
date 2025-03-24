@@ -7,6 +7,31 @@ import (
 	v1 "github.com/onexstack_practice/fast_blog/pkg/api/apiserver/v1"
 )
 
+func (v *Validator) ValidateLoginRequest(ctx context.Context, rq *v1.LoginRequest) error {
+	// Validate username
+	if rq.Username == "" {
+		return errors.New("username cannot be empty")
+	}
+	if len(rq.Username) < 4 || len(rq.Username) > 32 {
+		return errors.New("username must be between 4 and 32 characters")
+	}
+
+	// Validate password
+	if rq.Password == "" {
+		return errors.New("password cannot be empty")
+	}
+	if len(rq.Password) < 8 || len(rq.Password) > 64 {
+		return errors.New("password must be between 8 and 64 characters")
+	}
+
+	return nil
+}
+
+func (v *Validator) ValidateRefreshTokenRequest(ctx context.Context, rq *v1.RefreshTokenRequest) error {
+	// todo...
+	return nil
+}
+
 func (v *Validator) ValidateCreateUserRequest(ctx context.Context, rq *v1.CreateUserRequest) error {
 	// Validate username
 	if rq.Username == "" {
