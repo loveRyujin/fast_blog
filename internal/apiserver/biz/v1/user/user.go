@@ -88,6 +88,12 @@ func (b *userBiz) Create(ctx context.Context, rq *apiv1.CreateUserRequest) (*api
 	var userM model.User
 	_ = copier.Copy(&userM, rq)
 
+	encryptedPassword, err := auth.Encrypt(userM.Password)
+	if err != nil {
+		return nil, err
+	}
+	userM.Password = encryptedPassword
+
 	if err := b.store.User().Create(ctx, &userM); err != nil {
 		return nil, err
 	}
