@@ -73,7 +73,6 @@ func (b *userBiz) Login(ctx context.Context, rq *apiv1.LoginRequest) (*apiv1.Log
 
 // RefreshToken 实现 UserExpansion 接口中的 RefreshToken 方法.
 func (b *userBiz) RefreshToken(ctx context.Context, rq *apiv1.RefreshTokenRequest) (*apiv1.RefreshTokenResponse, error) {
-	slog.Debug("debug", "userID", contextx.UserID(ctx))
 	// 刷新 token
 	token, expireAt, err := token.Sign(contextx.UserID(ctx))
 	if err != nil {

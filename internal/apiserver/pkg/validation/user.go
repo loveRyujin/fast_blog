@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 
+	"github.com/onexstack_practice/fast_blog/internal/pkg/contextx"
 	v1 "github.com/onexstack_practice/fast_blog/pkg/api/apiserver/v1"
 )
 
@@ -28,7 +29,11 @@ func (v *Validator) ValidateLoginRequest(ctx context.Context, rq *v1.LoginReques
 }
 
 func (v *Validator) ValidateRefreshTokenRequest(ctx context.Context, rq *v1.RefreshTokenRequest) error {
-	// todo...
+	userID := contextx.UserID(ctx)
+	if userID == "" {
+		return errors.New("user ID cannot be empty")
+	}
+
 	return nil
 }
 
@@ -70,21 +75,52 @@ func (v *Validator) ValidateCreateUserRequest(ctx context.Context, rq *v1.Create
 }
 
 func (v *Validator) ValidateUpdateUserRequest(ctx context.Context, rq *v1.UpdateUserRequest) error {
-	// todo...
+	if rq.Username != nil && (len(*rq.Username) < 4 || len(*rq.Username) > 32) {
+		return errors.New("username must be between 4 and 32 characters")
+	}
+
+	if rq.Nickname != nil && *rq.Nickname != "" {
+		if len(*rq.Nickname) > 32 {
+			return errors.New("nickname cannot exceed 32 characters")
+		}
+	}
+
+	if rq.Email != nil && *rq.Email == "" {
+		return errors.New("email cannot be empty")
+	}
+
+	if rq.Phone != nil && *rq.Phone == "" {
+		return errors.New("phone number cannot be empty")
+	}
+
 	return nil
 }
 
 func (v *Validator) ValidateDeleteUserRequest(ctx context.Context, rq *v1.DeleteUserRequest) error {
-	// todo...
+	userID := contextx.UserID(ctx)
+	if userID == "" {
+		return errors.New("user ID cannot be empty")
+	}
+
 	return nil
 }
 
 func (v *Validator) ValidateGetUserRequest(ctx context.Context, rq *v1.GetUserRequest) error {
-	// todo...
+	userID := contextx.UserID(ctx)
+	if userID == "" {
+		return errors.New("user ID cannot be empty")
+	}
+
 	return nil
 }
 
 func (v *Validator) ValidateListUserRequest(ctx context.Context, rq *v1.ListUserRequest) error {
-	// todo...
+	if rq.Offset < 0 {
+		return errors.New("offset cannot be negative")
+	}
+
+	if rq.Limit <= 0 {
+		return errors.New("limit must be greater than 0")
+	}
 	return nil
 }
