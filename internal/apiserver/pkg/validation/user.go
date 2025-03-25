@@ -37,6 +37,29 @@ func (v *Validator) ValidateRefreshTokenRequest(ctx context.Context, rq *v1.Refr
 	return nil
 }
 
+func (v *Validator) ValidateChangePasswordRequest(ctx context.Context, rq *v1.ChangePasswordRequest) error {
+	userID := contextx.UserID(ctx)
+	if userID == "" {
+		return errors.New("user ID cannot be empty")
+	}
+
+	if rq.OldPassword == "" {
+		return errors.New("old password cannot be empty")
+	}
+	if len(rq.OldPassword) < 8 || len(rq.OldPassword) > 64 {
+		return errors.New("password must be between 8 and 64 characters")
+	}
+
+	if rq.NewPassword == "" {
+		return errors.New("old password cannot be empty")
+	}
+	if len(rq.NewPassword) < 8 || len(rq.NewPassword) > 64 {
+		return errors.New("password must be between 8 and 64 characters")
+	}
+
+	return nil
+}
+
 func (v *Validator) ValidateCreateUserRequest(ctx context.Context, rq *v1.CreateUserRequest) error {
 	// Validate username
 	if rq.Username == "" {

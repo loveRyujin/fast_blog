@@ -35,6 +35,7 @@ type UserBiz interface {
 type UserExpansion interface {
 	Login(ctx context.Context, rq *apiv1.LoginRequest) (*apiv1.LoginResponse, error)
 	RefreshToken(ctx context.Context, rq *apiv1.RefreshTokenRequest) (*apiv1.RefreshTokenResponse, error)
+	ChangePassword(ctx context.Context, rq *apiv1.ChangePasswordRequest) (*apiv1.ChangePasswordResponse, error)
 }
 
 // userBiz 是 UserBiz 接口的实现.
@@ -80,6 +81,29 @@ func (b *userBiz) RefreshToken(ctx context.Context, rq *apiv1.RefreshTokenReques
 	}
 
 	return &apiv1.RefreshTokenResponse{Token: token, ExpireAt: expireAt}, nil
+}
+
+// ChangePassword 实现UserExpansion 接口中的ChangePassword 方法.
+func (b *userBiz) ChangePassword(ctx context.Context, rq *apiv1.ChangePasswordRequest) (*apiv1.ChangePasswordResponse, error) {
+	userM, err := b.store.User().Get(ctx, where.F("userID", contextx.UserID(ctx)))
+	if err != nil {
+		return nil, err
+	}
+
+	if err := auth.Compare(userM.Password, rq.OldPassword); err != nil {
+		return nil, errorx.ErrPasswordInvalid
+	}
+
+	userM.Password, err = auth.Encrypt(rq.NewPassword)
+	if err != nil {
+		return nil, err
+	}
+
+	if err := b.store.User().Update(ctx, userM); err != nil {
+		return nil, err
+	}
+
+	return &apiv1.ChangePasswordResponse{}, nil
 }
 
 // Create 实现 UserBiz 接口中的 Create 方法.

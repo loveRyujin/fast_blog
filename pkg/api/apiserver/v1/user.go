@@ -52,6 +52,18 @@ type RefreshTokenResponse struct {
 	ExpireAt time.Time `json:"expireAt"`
 }
 
+// ChangePasswordRequest 表示更改用户密码的请求
+type ChangePasswordRequest struct {
+	// OldPassword 表示当前的密码
+	OldPassword string `json:"oldPassword"`
+	// NewPassword 表示要更换为的密码
+	NewPassword string `json:"newPassword"`
+}
+
+// ChangePasswordResponse 表示更改用户密码的响应
+type ChangePasswordResponse struct {
+}
+
 // CreateUserRequest 表示创建用户请求
 type CreateUserRequest struct {
 	// username 表示用户名称

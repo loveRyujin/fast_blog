@@ -57,6 +57,29 @@ func (h *Handler) RefreshToken(c *gin.Context) {
 	core.WriteResponse(c, nil, resp)
 }
 
+func (h *Handler) ChangePassword(c *gin.Context) {
+	slog.Info("Change user password function call")
+
+	var request v1.ChangePasswordRequest
+	if err := c.ShouldBindJSON(&request); err != nil {
+		core.WriteResponse(c, errorx.ErrBind, nil)
+		return
+	}
+
+	if err := h.validator.ValidateChangePasswordRequest(c.Request.Context(), &request); err != nil {
+		core.WriteResponse(c, errorx.ErrInvalidArugment.WithMessage(err.Error()), nil)
+		return
+	}
+
+	resp, err := h.biz.UserV1().ChangePassword(c.Request.Context(), &request)
+	if err != nil {
+		core.WriteResponse(c, err, nil)
+		return
+	}
+
+	core.WriteResponse(c, nil, resp)
+}
+
 // CreateUser 创建用户
 func (h *Handler) CreateUser(c *gin.Context) {
 	slog.Info("Create user function call")

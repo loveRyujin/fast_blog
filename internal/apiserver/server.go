@@ -97,10 +97,11 @@ func (cfg *Config) SetupRouter(engine *gin.Engine, store store.IStore) {
 			// 创建用户。这里要注意：创建用户是不用进行认证和授权的
 			userv1.POST("", handler.CreateUser)
 			userv1.Use(authMiddlewares...)
-			userv1.PUT(":userID", handler.UpdateUser)    // 更新用户信息
-			userv1.DELETE(":userID", handler.DeleteUser) // 删除用户
-			userv1.GET(":userID", handler.GetUser)       // 查询用户详情
-			userv1.GET("", handler.ListUser)             // 查询用户列表.
+			userv1.PUT(":userID/change-password", handler.ChangePassword) // 修改用户密码
+			userv1.PUT(":userID", handler.UpdateUser)                     // 更新用户信息
+			userv1.DELETE(":userID", handler.DeleteUser)                  // 删除用户
+			userv1.GET(":userID", handler.GetUser)                        // 查询用户详情
+			userv1.GET("", handler.ListUser)                              // 查询用户列表
 		}
 
 		// 博客相关路由
