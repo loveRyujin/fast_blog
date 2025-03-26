@@ -1,0 +1,14 @@
+mode: set
+github.com/onexstack_practice/fast_blog/internal/pkg/rid/rid.go:19.39,21.2 1 1
+github.com/onexstack_practice/fast_blog/internal/pkg/rid/rid.go:24.50,33.2 2 1
+github.com/onexstack_practice/fast_blog/internal/pkg/rid/salt.go:12.20,20.2 4 1
+github.com/onexstack_practice/fast_blog/internal/pkg/rid/salt.go:23.29,26.39 3 1
+github.com/onexstack_practice/fast_blog/internal/pkg/rid/salt.go:26.39,28.3 1 0
+github.com/onexstack_practice/fast_blog/internal/pkg/rid/salt.go:30.2,30.39 1 1
+github.com/onexstack_practice/fast_blog/internal/pkg/rid/salt.go:30.39,34.3 3 1
+github.com/onexstack_practice/fast_blog/internal/pkg/rid/salt.go:34.8,36.57 1 0
+github.com/onexstack_practice/fast_blog/internal/pkg/rid/salt.go:36.57,37.99 1 0
+github.com/onexstack_practice/fast_blog/internal/pkg/rid/salt.go:40.2,40.11 1 1
+github.com/onexstack_practice/fast_blog/internal/pkg/rid/salt.go:44.46,46.34 2 1
+github.com/onexstack_practice/fast_blog/internal/pkg/rid/salt.go:46.34,48.3 1 0
+github.com/onexstack_practice/fast_blog/internal/pkg/rid/salt.go:49.2,49.26 1 1
