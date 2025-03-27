@@ -133,7 +133,7 @@ func (h *Handler) DeleteUser(c *gin.Context) {
 	slog.Info("Delete user function called")
 
 	var request v1.DeleteUserRequest
-	if err := c.ShouldBindJSON(&request); err != nil {
+	if err := c.ShouldBindUri(&request); err != nil {
 		core.WriteResponse(c, errorx.ErrBind, nil)
 		return
 	}
@@ -157,7 +157,7 @@ func (h *Handler) GetUser(c *gin.Context) {
 	slog.Info("Get user function called")
 
 	var request v1.GetUserRequest
-	if err := c.ShouldBindJSON(&request); err != nil {
+	if err := c.ShouldBindUri(&request); err != nil {
 		core.WriteResponse(c, errorx.ErrBind, nil)
 		return
 	}
@@ -181,7 +181,7 @@ func (h *Handler) ListUser(c *gin.Context) {
 	slog.Info("List user function called")
 
 	var request v1.ListUserRequest
-	if err := c.ShouldBindJSON(&request); err != nil {
+	if err := c.ShouldBindQuery(&request); err != nil {
 		core.WriteResponse(c, errorx.ErrBind, nil)
 		return
 	}

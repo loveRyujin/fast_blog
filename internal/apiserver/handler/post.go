@@ -42,6 +42,7 @@ func (h *Handler) UpdatePost(c *gin.Context) {
 		core.WriteResponse(c, errorx.ErrBind, nil)
 		return
 	}
+	rq.PostID = c.Param("postID")
 
 	if err := h.validator.ValidateUpdatePostRequest(c.Request.Context(), &rq); err != nil {
 		core.WriteResponse(c, errorx.ErrInvalidArugment.WithMessage(err.Error()), nil)
@@ -86,7 +87,7 @@ func (h *Handler) GetPost(c *gin.Context) {
 	slog.Info("get post function call")
 
 	var rq apiv1.GetPostRequest
-	if err := c.ShouldBindJSON(&rq); err != nil {
+	if err := c.ShouldBindUri(&rq); err != nil {
 		core.WriteResponse(c, errorx.ErrBind, nil)
 		return
 	}
@@ -110,7 +111,7 @@ func (h *Handler) ListPost(c *gin.Context) {
 	slog.Info("list post function call")
 
 	var rq apiv1.ListPostRequest
-	if err := c.ShouldBindJSON(&rq); err != nil {
+	if err := c.ShouldBindQuery(&rq); err != nil {
 		core.WriteResponse(c, errorx.ErrBind, nil)
 		return
 	}

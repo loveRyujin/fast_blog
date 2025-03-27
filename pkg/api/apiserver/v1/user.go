@@ -121,9 +121,9 @@ type GetUserResponse struct {
 // ListUserRequest 表示用户列表请求
 type ListUserRequest struct {
 	// offset 表示偏移量
-	Offset int64 `json:"offset"`
+	Offset int64 `form:"offset"`
 	// limit 表示每页数量
-	Limit int64 `json:"limit"`
+	Limit int64 `form:"limit"`
 }
 
 // ListUserResponse 表示用户列表响应
