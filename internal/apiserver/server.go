@@ -18,6 +18,7 @@ import (
 	"github.com/loveRyujin/fast_blog/internal/pkg/core"
 	"github.com/loveRyujin/fast_blog/internal/pkg/errorx"
 	"github.com/loveRyujin/fast_blog/internal/pkg/known"
+	"github.com/loveRyujin/fast_blog/internal/pkg/log"
 	mw "github.com/loveRyujin/fast_blog/internal/pkg/middleware"
 	genericclioptions "github.com/loveRyujin/fast_blog/pkg/options"
 	"github.com/loveRyujin/fast_blog/pkg/token"
@@ -117,8 +118,8 @@ func (cfg *Config) SetupRouter(engine *gin.Engine, store store.IStore) {
 }
 
 func (s *Server) Run() error {
-	slog.Info("Read Mysql addr from Viper", "mysql.addr", s.Config.MysqlOptions.Addr)
-	slog.Info("Start to listen the incoming request on http address", "addr", s.Config.Addr)
+	log.Infow("Read Mysql addr from Viper", "mysql.addr", s.Config.MysqlOptions.Addr)
+	log.Infow("Start to listen the incoming request on http address", "addr", s.Config.Addr)
 
 	go func() {
 		if err := s.srv.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
@@ -131,7 +132,7 @@ func (s *Server) Run() error {
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 	<-quit
 
-	slog.Info("Shutdown Server ...")
+	log.Infow("Shutdown Server ...")
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
@@ -143,7 +144,7 @@ func (s *Server) Run() error {
 		return err
 	}
 
-	slog.Info("Server exited")
+	log.Infow("Server exited")
 
 	return nil
 }

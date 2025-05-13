@@ -8,9 +8,12 @@ mysql:
   max-connection-life-time: 10s
 
 log:
-  level: info
-  format: text
-  output: stdout
+  caller-enabled: true
+  stacktrace-enabled: true
+  level: debug
+  format: json
+  output: 
+    - stdout
 
 addr: ":8080"
 

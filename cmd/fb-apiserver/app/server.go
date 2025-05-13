@@ -2,11 +2,9 @@ package app
 
 import (
 	"fmt"
-	"io"
-	"log/slog"
-	"os"
 
 	"github.com/loveRyujin/fast_blog/cmd/fb-apiserver/app/options"
+	"github.com/loveRyujin/fast_blog/internal/pkg/log"
 	"github.com/loveRyujin/fast_blog/pkg/version"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -50,7 +48,7 @@ func run(opts *options.ServerOptions) error {
 	version.PrintAndExitIfRequested()
 
 	// 初始化日志
-	initLog()
+	log.Init(logOptions())
 
 	// 从配置文件中读取配置
 	if err := viper.Unmarshal(opts); err != nil {
@@ -78,57 +76,24 @@ func run(opts *options.ServerOptions) error {
 	return server.Run()
 }
 
-func initLog() {
-	slevel := getLogLevel()
-	sopts := &slog.HandlerOptions{Level: slevel}
-	soutput := getLogOutput()
-	handler := getLogHandler(soutput, sopts)
-	slog.SetDefault(slog.New(handler))
-}
-
-// getLogLevel 从配置文件中获取日志级别
-func getLogLevel() slog.Level {
-	level := viper.GetString("log.level")
-	switch level {
-	case "debug":
-		return slog.LevelDebug
-	case "info":
-		return slog.LevelInfo
-	case "warn":
-		return slog.LevelWarn
-	case "error":
-		return slog.LevelError
-	default:
-		return slog.LevelInfo
+// logOptions 从 viper 中读取日志配置，构建 *log.Options 并返回.
+// 注意：viper.Get<Type>() 中 key 的名字需要使用 . 分割，以跟 YAML 中保持相同的缩进.
+func logOptions() *log.Options {
+	opts := log.NewOptions()
+	if viper.IsSet("log.caller-enabled") {
+		opts.CallerEnabled = viper.GetBool("log.caller-enabled")
 	}
-}
-
-// getLogOutput 从配置文件中获取日志输出
-func getLogOutput() io.Writer {
-	output := viper.GetString("log.output")
-	switch output {
-	case "":
-		return os.Stdout
-	case "stdout":
-		return os.Stdout
-	default:
-		fd, err := os.OpenFile(output, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
-		if err != nil {
-			panic(err)
-		}
-		return fd
+	if viper.IsSet("log.stacktrace-enabled") {
+		opts.CallerEnabled = viper.GetBool("log.stacktrace-enabled")
 	}
-}
-
-// getLogHandler 根据配置文件配置获取日志处理器
-func getLogHandler(output io.Writer, opts *slog.HandlerOptions) slog.Handler {
-	format := viper.GetString("log.format")
-	switch format {
-	case "json":
-		return slog.NewJSONHandler(output, opts)
-	case "text":
-		return slog.NewTextHandler(output, opts)
-	default:
-		return slog.NewJSONHandler(output, opts)
+	if viper.IsSet("log.level") {
+		opts.Level = viper.GetString("log.level")
 	}
+	if viper.IsSet("log.format") {
+		opts.Format = viper.GetString("log.format")
+	}
+	if viper.IsSet("log.output") {
+		opts.Output = viper.GetStringSlice("log.output")
+	}
+	return opts
 }
