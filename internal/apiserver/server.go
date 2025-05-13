@@ -11,16 +11,16 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/onexstack_practice/fast_blog/internal/apiserver/biz"
-	"github.com/onexstack_practice/fast_blog/internal/apiserver/handler"
-	"github.com/onexstack_practice/fast_blog/internal/apiserver/pkg/validation"
-	"github.com/onexstack_practice/fast_blog/internal/apiserver/store"
-	"github.com/onexstack_practice/fast_blog/internal/pkg/core"
-	"github.com/onexstack_practice/fast_blog/internal/pkg/errorx"
-	"github.com/onexstack_practice/fast_blog/internal/pkg/known"
-	mw "github.com/onexstack_practice/fast_blog/internal/pkg/middleware"
-	genericclioptions "github.com/onexstack_practice/fast_blog/pkg/options"
-	"github.com/onexstack_practice/fast_blog/pkg/token"
+	"github.com/loveRyujin/fast_blog/internal/apiserver/biz"
+	"github.com/loveRyujin/fast_blog/internal/apiserver/handler"
+	"github.com/loveRyujin/fast_blog/internal/apiserver/pkg/validation"
+	"github.com/loveRyujin/fast_blog/internal/apiserver/store"
+	"github.com/loveRyujin/fast_blog/internal/pkg/core"
+	"github.com/loveRyujin/fast_blog/internal/pkg/errorx"
+	"github.com/loveRyujin/fast_blog/internal/pkg/known"
+	mw "github.com/loveRyujin/fast_blog/internal/pkg/middleware"
+	genericclioptions "github.com/loveRyujin/fast_blog/pkg/options"
+	"github.com/loveRyujin/fast_blog/pkg/token"
 )
 
 // Config存储应用配置

@@ -1,4 +1,4 @@
-module github.com/onexstack_practice/fast_blog
+module github.com/loveRyujin/fast_blog
 
 go 1.24.0
 

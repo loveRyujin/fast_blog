@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/onexstack_practice/fast_blog/internal/pkg/errorx"
+	"github.com/loveRyujin/fast_blog/internal/pkg/errorx"
 )
 
 // ErrorResponse 是通用的错误响应结构体

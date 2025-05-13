@@ -1,9 +1,9 @@
 package biz
 
 import (
-	postv1 "github.com/onexstack_practice/fast_blog/internal/apiserver/biz/v1/post"
-	userv1 "github.com/onexstack_practice/fast_blog/internal/apiserver/biz/v1/user"
-	"github.com/onexstack_practice/fast_blog/internal/apiserver/store"
+	postv1 "github.com/loveRyujin/fast_blog/internal/apiserver/biz/v1/post"
+	userv1 "github.com/loveRyujin/fast_blog/internal/apiserver/biz/v1/user"
+	"github.com/loveRyujin/fast_blog/internal/apiserver/store"
 )
 
 type IBiz interface {

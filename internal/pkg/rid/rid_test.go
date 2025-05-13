@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/onexstack_practice/fast_blog/internal/pkg/rid"
+	"github.com/loveRyujin/fast_blog/internal/pkg/rid"
 	"github.com/stretchr/testify/assert"
 )
 

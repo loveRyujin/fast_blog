@@ -4,8 +4,8 @@ import (
 	"context"
 	"errors"
 
-	"github.com/onexstack_practice/fast_blog/internal/pkg/contextx"
-	v1 "github.com/onexstack_practice/fast_blog/pkg/api/apiserver/v1"
+	"github.com/loveRyujin/fast_blog/internal/pkg/contextx"
+	v1 "github.com/loveRyujin/fast_blog/pkg/api/apiserver/v1"
 )
 
 func (v *Validator) ValidateLoginRequest(ctx context.Context, rq *v1.LoginRequest) error {

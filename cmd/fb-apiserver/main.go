@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/onexstack_practice/fast_blog/cmd/fb-apiserver/app"
+	"github.com/loveRyujin/fast_blog/cmd/fb-apiserver/app"
 	_ "go.uber.org/automaxprocs"
 )
 

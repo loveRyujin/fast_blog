@@ -6,18 +6,18 @@ import (
 	"sync"
 
 	"github.com/jinzhu/copier"
+	"github.com/loveRyujin/fast_blog/internal/apiserver/model"
+	"github.com/loveRyujin/fast_blog/internal/apiserver/pkg/conversion"
+	"github.com/loveRyujin/fast_blog/internal/apiserver/store"
+	"github.com/loveRyujin/fast_blog/internal/pkg/contextx"
+	"github.com/loveRyujin/fast_blog/internal/pkg/errorx"
+	"github.com/loveRyujin/fast_blog/internal/pkg/known"
 	"github.com/onexstack/onexstack/pkg/store/where"
-	"github.com/onexstack_practice/fast_blog/internal/apiserver/model"
-	"github.com/onexstack_practice/fast_blog/internal/apiserver/pkg/conversion"
-	"github.com/onexstack_practice/fast_blog/internal/apiserver/store"
-	"github.com/onexstack_practice/fast_blog/internal/pkg/contextx"
-	"github.com/onexstack_practice/fast_blog/internal/pkg/errorx"
-	"github.com/onexstack_practice/fast_blog/internal/pkg/known"
 	"golang.org/x/sync/errgroup"
 
-	apiv1 "github.com/onexstack_practice/fast_blog/pkg/api/apiserver/v1"
-	"github.com/onexstack_practice/fast_blog/pkg/auth"
-	"github.com/onexstack_practice/fast_blog/pkg/token"
+	apiv1 "github.com/loveRyujin/fast_blog/pkg/api/apiserver/v1"
+	"github.com/loveRyujin/fast_blog/pkg/auth"
+	"github.com/loveRyujin/fast_blog/pkg/token"
 )
 
 // UserBiz 定义处理用户请求所需的方法.

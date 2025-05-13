@@ -1,6 +1,6 @@
 package validation
 
-import "github.com/onexstack_practice/fast_blog/internal/apiserver/store"
+import "github.com/loveRyujin/fast_blog/internal/apiserver/store"
 
 type Validator struct {
 	// 有些复杂的验证逻辑，可能需要直接查询数据库

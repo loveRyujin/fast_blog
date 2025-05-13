@@ -8,8 +8,8 @@ import (
 	"github.com/onexstack/onexstack/pkg/store/where"
 	"gorm.io/gorm"
 
-	"github.com/onexstack_practice/fast_blog/internal/apiserver/model"
-	"github.com/onexstack_practice/fast_blog/internal/pkg/errorx"
+	"github.com/loveRyujin/fast_blog/internal/apiserver/model"
+	"github.com/loveRyujin/fast_blog/internal/pkg/errorx"
 )
 
 // UserStore 定义了 user 模块在 store 层所实现的方法.

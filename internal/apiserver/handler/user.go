@@ -4,9 +4,9 @@ import (
 	"log/slog"
 
 	"github.com/gin-gonic/gin"
-	"github.com/onexstack_practice/fast_blog/internal/pkg/core"
-	"github.com/onexstack_practice/fast_blog/internal/pkg/errorx"
-	v1 "github.com/onexstack_practice/fast_blog/pkg/api/apiserver/v1"
+	"github.com/loveRyujin/fast_blog/internal/pkg/core"
+	"github.com/loveRyujin/fast_blog/internal/pkg/errorx"
+	v1 "github.com/loveRyujin/fast_blog/pkg/api/apiserver/v1"
 )
 
 // Login 用户登录

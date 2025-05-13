@@ -6,8 +6,8 @@ import (
 	"log/slog"
 	"os"
 
-	"github.com/onexstack_practice/fast_blog/cmd/fb-apiserver/app/options"
-	"github.com/onexstack_practice/fast_blog/pkg/version"
+	"github.com/loveRyujin/fast_blog/cmd/fb-apiserver/app/options"
+	"github.com/loveRyujin/fast_blog/pkg/version"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )

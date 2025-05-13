@@ -7,8 +7,8 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/onexstack_practice/fast_blog/internal/apiserver"
-	genericoptions "github.com/onexstack_practice/fast_blog/pkg/options"
+	"github.com/loveRyujin/fast_blog/internal/apiserver"
+	genericoptions "github.com/loveRyujin/fast_blog/pkg/options"
 )
 
 type ServerOptions struct {

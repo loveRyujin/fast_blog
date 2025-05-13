@@ -3,7 +3,7 @@ package model
 import (
 	"gorm.io/gorm"
 
-	"github.com/onexstack_practice/fast_blog/internal/pkg/rid"
+	"github.com/loveRyujin/fast_blog/internal/pkg/rid"
 )
 
 // AfterCreate 在创建数据库记录之后生成 postID.

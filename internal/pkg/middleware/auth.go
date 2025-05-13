@@ -2,10 +2,10 @@ package middleware
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/onexstack_practice/fast_blog/internal/pkg/contextx"
-	"github.com/onexstack_practice/fast_blog/internal/pkg/core"
-	"github.com/onexstack_practice/fast_blog/internal/pkg/errorx"
-	"github.com/onexstack_practice/fast_blog/pkg/token"
+	"github.com/loveRyujin/fast_blog/internal/pkg/contextx"
+	"github.com/loveRyujin/fast_blog/internal/pkg/core"
+	"github.com/loveRyujin/fast_blog/internal/pkg/errorx"
+	"github.com/loveRyujin/fast_blog/pkg/token"
 )
 
 // Authn 是认证中间件，用来从 gin.Context 中提取 token 并验证 token 是否合法，

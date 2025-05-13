@@ -3,8 +3,8 @@ package middleware
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
-	"github.com/onexstack_practice/fast_blog/internal/pkg/contextx"
-	"github.com/onexstack_practice/fast_blog/internal/pkg/known"
+	"github.com/loveRyujin/fast_blog/internal/pkg/contextx"
+	"github.com/loveRyujin/fast_blog/internal/pkg/known"
 )
 
 func RequestID() gin.HandlerFunc {

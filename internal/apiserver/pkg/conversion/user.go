@@ -1,10 +1,10 @@
 package conversion
 
 import (
+	"github.com/loveRyujin/fast_blog/internal/apiserver/model"
 	"github.com/onexstack/onexstack/pkg/core"
-	"github.com/onexstack_practice/fast_blog/internal/apiserver/model"
 
-	apiv1 "github.com/onexstack_practice/fast_blog/pkg/api/apiserver/v1"
+	apiv1 "github.com/loveRyujin/fast_blog/pkg/api/apiserver/v1"
 )
 
 // UserodelToUserV1 将模型层的 User（用户模型对象）转换为 Protobuf 层的 User（v1 用户对象）.
