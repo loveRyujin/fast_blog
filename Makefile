@@ -8,6 +8,8 @@ PROJ_ROOT_DIR := $(abspath $(shell cd $(COMMON_SELF_DIR)/ && pwd -P))
 OUTPUT_DIR := $(PROJ_ROOT_DIR)/_output
 # 构建二进制文件名
 EXECUTABLE := fb-apiserver
+# ProtoBuf 文件存放路径
+APIROOT_DIR := $(PROJ_ROOT_DIR)/pkg/api
 
 # ==============================================================================
 # 定义版本相关变量
@@ -58,3 +60,15 @@ tidy: # 自动添加/移除依赖包.
 .PHONY: clean
 clean: # 清理构建产物、临时文件等.
 	-rm -vrf $(OUTPUT_DIR)
+
+.PHONY: protoc
+protoc: # 生成 Protobuf 相关代码.
+	@echo "===========> Generating protobuf code"
+	protoc \
+		--proto_path=$(APIROOT_DIR) \
+		--proto_path=$(PROJ_ROOT_DIR)/third_party/protobuf \
+		--go_out=$(APIROOT_DIR) \
+		--go_opt=paths=source_relative \
+		--go-grpc_out=$(APIROOT_DIR) \
+		--go-grpc_opt=paths=source_relative \
+		$(shell find $(APIROOT_DIR) -name '*.proto' -print0 | xargs -0)
