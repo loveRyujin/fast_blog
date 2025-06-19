@@ -1,5 +1,7 @@
 ## fast_blog project
 
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/loveRyujin/fast_blog)
+
 ## 项目快速部署
 ```bash
 $ mkdir -p  $HOME/golang/src/github.com/onexstack_practice/
