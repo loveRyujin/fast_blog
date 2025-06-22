@@ -67,7 +67,7 @@ func run(opts *options.ServerOptions) error {
 	cfg := opts.Config()
 
 	// 创建服务器实例
-	server, err := cfg.NewServer()
+	server, err := cfg.NewUnionServer()
 	if err != nil {
 		return err
 	}
