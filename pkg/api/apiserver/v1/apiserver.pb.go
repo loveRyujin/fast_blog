@@ -26,16 +26,16 @@ var File_apiserver_v1_apiserver_proto protoreflect.FileDescriptor
 const file_apiserver_v1_apiserver_proto_rawDesc = "" +
 	"\n" +
 	"\x1capiserver/v1/apiserver.proto\x12\x02v1\x1a\x1bgoogle/protobuf/empty.proto\x1a\x1aapiserver/v1/healthz.proto2D\n" +
-	"\bMiniBlog\x128\n" +
-	"\aHealthz\x12\x16.google.protobuf.Empty\x1a\x13.v1.HealthzResponse\"\x00B7Z5github.com/onexstack/miniblog/pkg/api/apiserver/v1;v1b\x06proto3"
+	"\bFastBlog\x128\n" +
+	"\aHealthz\x12\x16.google.protobuf.Empty\x1a\x13.v1.HealthzResponse\"\x00B6Z4github.com/loveRyujin/fast_blog/pkg/api/apiserver/v1b\x06proto3"
 
 var file_apiserver_v1_apiserver_proto_goTypes = []any{
 	(*emptypb.Empty)(nil),   // 0: google.protobuf.Empty
 	(*HealthzResponse)(nil), // 1: v1.HealthzResponse
 }
 var file_apiserver_v1_apiserver_proto_depIdxs = []int32{
-	0, // 0: v1.MiniBlog.Healthz:input_type -> google.protobuf.Empty
-	1, // 1: v1.MiniBlog.Healthz:output_type -> v1.HealthzResponse
+	0, // 0: v1.FastBlog.Healthz:input_type -> google.protobuf.Empty
+	1, // 1: v1.FastBlog.Healthz:output_type -> v1.HealthzResponse
 	1, // [1:2] is the sub-list for method output_type
 	0, // [0:1] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name

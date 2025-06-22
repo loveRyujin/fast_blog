@@ -20,107 +20,107 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	MiniBlog_Healthz_FullMethodName = "/v1.MiniBlog/Healthz"
+	FastBlog_Healthz_FullMethodName = "/v1.FastBlog/Healthz"
 )
 
-// MiniBlogClient is the client API for MiniBlog service.
+// FastBlogClient is the client API for FastBlog service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 //
-// MiniBlog 定义了一个 MiniBlog RPC 服务
-type MiniBlogClient interface {
+// FastBlog 定义了一个 FastBlog RPC 服务
+type FastBlogClient interface {
 	// Healthz 健康检查
 	Healthz(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*HealthzResponse, error)
 }
 
-type miniBlogClient struct {
+type fastBlogClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewMiniBlogClient(cc grpc.ClientConnInterface) MiniBlogClient {
-	return &miniBlogClient{cc}
+func NewFastBlogClient(cc grpc.ClientConnInterface) FastBlogClient {
+	return &fastBlogClient{cc}
 }
 
-func (c *miniBlogClient) Healthz(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*HealthzResponse, error) {
+func (c *fastBlogClient) Healthz(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*HealthzResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(HealthzResponse)
-	err := c.cc.Invoke(ctx, MiniBlog_Healthz_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, FastBlog_Healthz_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// MiniBlogServer is the server API for MiniBlog service.
-// All implementations must embed UnimplementedMiniBlogServer
+// FastBlogServer is the server API for FastBlog service.
+// All implementations must embed UnimplementedFastBlogServer
 // for forward compatibility.
 //
-// MiniBlog 定义了一个 MiniBlog RPC 服务
-type MiniBlogServer interface {
+// FastBlog 定义了一个 FastBlog RPC 服务
+type FastBlogServer interface {
 	// Healthz 健康检查
 	Healthz(context.Context, *emptypb.Empty) (*HealthzResponse, error)
-	mustEmbedUnimplementedMiniBlogServer()
+	mustEmbedUnimplementedFastBlogServer()
 }
 
-// UnimplementedMiniBlogServer must be embedded to have
+// UnimplementedFastBlogServer must be embedded to have
 // forward compatible implementations.
 //
 // NOTE: this should be embedded by value instead of pointer to avoid a nil
 // pointer dereference when methods are called.
-type UnimplementedMiniBlogServer struct{}
+type UnimplementedFastBlogServer struct{}
 
-func (UnimplementedMiniBlogServer) Healthz(context.Context, *emptypb.Empty) (*HealthzResponse, error) {
+func (UnimplementedFastBlogServer) Healthz(context.Context, *emptypb.Empty) (*HealthzResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Healthz not implemented")
 }
-func (UnimplementedMiniBlogServer) mustEmbedUnimplementedMiniBlogServer() {}
-func (UnimplementedMiniBlogServer) testEmbeddedByValue()                  {}
+func (UnimplementedFastBlogServer) mustEmbedUnimplementedFastBlogServer() {}
+func (UnimplementedFastBlogServer) testEmbeddedByValue()                  {}
 
-// UnsafeMiniBlogServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to MiniBlogServer will
+// UnsafeFastBlogServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to FastBlogServer will
 // result in compilation errors.
-type UnsafeMiniBlogServer interface {
-	mustEmbedUnimplementedMiniBlogServer()
+type UnsafeFastBlogServer interface {
+	mustEmbedUnimplementedFastBlogServer()
 }
 
-func RegisterMiniBlogServer(s grpc.ServiceRegistrar, srv MiniBlogServer) {
-	// If the following call pancis, it indicates UnimplementedMiniBlogServer was
+func RegisterFastBlogServer(s grpc.ServiceRegistrar, srv FastBlogServer) {
+	// If the following call pancis, it indicates UnimplementedFastBlogServer was
 	// embedded by pointer and is nil.  This will cause panics if an
 	// unimplemented method is ever invoked, so we test this at initialization
 	// time to prevent it from happening at runtime later due to I/O.
 	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
 		t.testEmbeddedByValue()
 	}
-	s.RegisterService(&MiniBlog_ServiceDesc, srv)
+	s.RegisterService(&FastBlog_ServiceDesc, srv)
 }
 
-func _MiniBlog_Healthz_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _FastBlog_Healthz_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(emptypb.Empty)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MiniBlogServer).Healthz(ctx, in)
+		return srv.(FastBlogServer).Healthz(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: MiniBlog_Healthz_FullMethodName,
+		FullMethod: FastBlog_Healthz_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MiniBlogServer).Healthz(ctx, req.(*emptypb.Empty))
+		return srv.(FastBlogServer).Healthz(ctx, req.(*emptypb.Empty))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// MiniBlog_ServiceDesc is the grpc.ServiceDesc for MiniBlog service.
+// FastBlog_ServiceDesc is the grpc.ServiceDesc for FastBlog service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var MiniBlog_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "v1.MiniBlog",
-	HandlerType: (*MiniBlogServer)(nil),
+var FastBlog_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "v1.FastBlog",
+	HandlerType: (*FastBlogServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "Healthz",
-			Handler:    _MiniBlog_Healthz_Handler,
+			Handler:    _FastBlog_Healthz_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

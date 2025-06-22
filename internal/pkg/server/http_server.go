@@ -15,6 +15,7 @@ type HTTPServer struct {
 	srv *http.Server
 }
 
+// NewHTTPServer 创建一个新的HTTP服务器实例
 func NewHTTPServer(httpOptions *options.HTTPOptions, handler http.Handler) *HTTPServer {
 	return &HTTPServer{
 		srv: &http.Server{
