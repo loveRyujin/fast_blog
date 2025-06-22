@@ -15,7 +15,8 @@ log:
   output: 
     - stdout
 
-addr: ":8080"
+http:
+  addr: 127.0.0.1:8080
 
 # JWT 签发密钥
 jwt-key: Rtg8BPKNEf2mB4mgvKONGPZZQSaJWNLijxR42qRgq0iBb5

@@ -1,49 +1,55 @@
 package options
 
 import (
-	"errors"
 	"fmt"
-	"net"
-	"strconv"
 	"time"
 
 	"github.com/loveRyujin/fast_blog/internal/apiserver"
 	genericoptions "github.com/loveRyujin/fast_blog/pkg/options"
+	"k8s.io/apimachinery/pkg/util/sets"
+)
+
+var availableServerOptions = sets.New(
+	apiserver.GRPCServerMode,
+	apiserver.HTTPServerMode,
+	apiserver.GRPCGatewayServerMode,
 )
 
 type ServerOptions struct {
+	ServerMode   string                       `json:"server-mode" mapstructure:"server-mode"` // 服务器模式，支持grpc、http、grpc-gateway
 	MysqlOptions *genericoptions.MysqlOptions `json:"mysql" mapstructure:"mysql"`
-	Addr         string                       `json:"addr" mapstructure:"addr"`
+	GRPCOptions  *genericoptions.GRPCOptions  `json:"grpc" mapstructure:"grpc"`
+	HTTPOptions  *genericoptions.HTTPOptions  `json:"http" mapstructure:"http"`
 	JWTKey       string                       `json:"jwt-key" mapstructure:"jwt-key"`
 	Expiration   time.Duration                `json:"expiration" mapstructure:"expiration"`
 }
 
 func NewServerOptions() *ServerOptions {
 	return &ServerOptions{
+		ServerMode:   apiserver.GRPCGatewayServerMode,
 		MysqlOptions: genericoptions.NewMysqlOptions(),
-		Addr:         "0.0.0.0:6666",
+		GRPCOptions:  genericoptions.NewGRPCOptions(),
+		HTTPOptions:  genericoptions.NewHTTPOptions(),
 		Expiration:   2 * time.Hour,
 	}
 }
 
 // 校验ServerOptions配置
 func (o *ServerOptions) Validate() error {
+	if !availableServerOptions.Has(o.ServerMode) {
+		fmt.Printf("invalid server mode: %s, available modes: %v\n", o.ServerMode, availableServerOptions.UnsortedList())
+	}
+
 	if err := o.MysqlOptions.Validate(); err != nil {
 		return err
 	}
 
-	// 校验服务器地址
-	if o.Addr == "" {
-		return errors.New("server addr cannot be empty")
+	if err := o.HTTPOptions.Validate(); err != nil {
+		return err
 	}
-	_, portStr, err := net.SplitHostPort(o.Addr)
-	if err != nil {
-		return fmt.Errorf("invalid server addr format: '%s': %v", o.Addr, err)
-	}
-	// 校验服务器端口是否为数字且值是否合理
-	port, err := strconv.Atoi(portStr)
-	if err != nil || port <= 0 || port > 65535 {
-		return fmt.Errorf("invalid server port: %s", portStr)
+
+	if err := o.GRPCOptions.Validate(); err != nil {
+		return err
 	}
 
 	return nil
@@ -52,8 +58,10 @@ func (o *ServerOptions) Validate() error {
 // Config 基于ServerOptions配置生成apiserver.Config
 func (o *ServerOptions) Config() *apiserver.Config {
 	return &apiserver.Config{
+		ServerMode:   o.ServerMode,
 		MysqlOptions: o.MysqlOptions,
-		Addr:         o.Addr,
+		HTTPOptions:  o.HTTPOptions,
+		GRPCOptions:  o.GRPCOptions,
 		JWTKey:       o.JWTKey,
 		Expiration:   o.Expiration,
 	}

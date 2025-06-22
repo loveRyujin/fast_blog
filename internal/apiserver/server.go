@@ -24,10 +24,18 @@ import (
 	"github.com/loveRyujin/fast_blog/pkg/token"
 )
 
+const (
+	GRPCServerMode        = "grpc"
+	HTTPServerMode        = "http"
+	GRPCGatewayServerMode = "grpc-gateway"
+)
+
 // Config存储应用配置
 type Config struct {
+	ServerMode   string
 	MysqlOptions *genericclioptions.MysqlOptions
-	Addr         string
+	HTTPOptions  *genericclioptions.HTTPOptions
+	GRPCOptions  *genericclioptions.GRPCOptions
 	JWTKey       string
 	Expiration   time.Duration
 }
@@ -59,7 +67,7 @@ func (cfg *Config) NewServer() (*Server, error) {
 
 	// 创建httpServer实例
 	httpServer := &http.Server{
-		Addr:    cfg.Addr,
+		Addr:    cfg.HTTPOptions.Addr,
 		Handler: engine,
 	}
 
@@ -119,7 +127,7 @@ func (cfg *Config) SetupRouter(engine *gin.Engine, store store.IStore) {
 
 func (s *Server) Run() error {
 	log.Infow("Read Mysql addr from Viper", "mysql.addr", s.Config.MysqlOptions.Addr)
-	log.Infow("Start to listen the incoming request on http address", "addr", s.Config.Addr)
+	log.Infow("Start to listen the incoming request on http address", "addr", s.Config.HTTPOptions.Addr)
 
 	go func() {
 		if err := s.srv.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
