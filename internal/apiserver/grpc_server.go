@@ -3,6 +3,7 @@ package apiserver
 import (
 	"context"
 
+	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	grpchandler "github.com/loveRyujin/fast_blog/internal/apiserver/handler/grpc"
 	"github.com/loveRyujin/fast_blog/internal/pkg/server"
 	apiv1 "github.com/loveRyujin/fast_blog/pkg/api/apiserver/v1"
@@ -45,7 +46,9 @@ func (cfg *Config) NewGRPCServerOr() (*GRPCServer, error) {
 	httpsrv, err := server.NewGRPCGatewayServer(
 		cfg.HTTPOptions,
 		cfg.GRPCOptions,
-		nil,
+		func(mux *runtime.ServeMux, conn *grpc.ClientConn) error {
+			return apiv1.RegisterFastBlogHandler(context.Background(), mux, conn)
+		},
 	)
 	if err != nil {
 		return nil, err

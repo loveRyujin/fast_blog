@@ -71,4 +71,8 @@ protoc: # 生成 Protobuf 相关代码.
 		--go_opt=paths=source_relative \
 		--go-grpc_out=$(APIROOT_DIR) \
 		--go-grpc_opt=paths=source_relative \
+		--grpc-gateway_out=$(APIROOT_DIR) \
+		--grpc-gateway_opt=paths=source_relative,allow_delete_body=true \
+		--openapiv2_out=$(PROJ_ROOT_DIR)/api/openapi \
+		--openapiv2_opt=allow_delete_body=true,logtostderr=true \
 		$(shell find $(APIROOT_DIR) -name '*.proto' -print0 | xargs -0)
