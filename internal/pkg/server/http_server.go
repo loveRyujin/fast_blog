@@ -26,7 +26,7 @@ func NewHTTPServer(httpOptions *options.HTTPOptions, handler http.Handler) *HTTP
 }
 
 func (s *HTTPServer) Run() {
-	log.Infow("Start to listen the incoming request on http address", "addr", s.srv.Addr)
+	log.Infow("Start to listen the incoming request on http address", "protocol", protocolName(s.srv), "addr", s.srv.Addr)
 
 	if err := s.srv.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
 		slog.Error(err.Error())

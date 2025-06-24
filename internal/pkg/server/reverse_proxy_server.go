@@ -59,7 +59,7 @@ func NewGRPCGatewayServer(
 }
 
 func (s *GRPCGatewayServer) Run() {
-	log.Infow("Start to listen the incoming requests", "addr", s.srv.Addr)
+	log.Infow("Start to listen the incoming requests", "protocol", protocolName(s.srv), "addr", s.srv.Addr)
 	if err := s.srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 		log.Fatalw("Failed to serve HTTP(s) server", "err", err)
 	}
