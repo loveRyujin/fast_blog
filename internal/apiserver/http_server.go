@@ -3,6 +3,7 @@ package apiserver
 import (
 	"context"
 
+	"github.com/gin-contrib/pprof"
 	"github.com/gin-gonic/gin"
 	"github.com/loveRyujin/fast_blog/internal/apiserver/biz"
 	"github.com/loveRyujin/fast_blog/internal/apiserver/handler"
@@ -49,6 +50,9 @@ func (cfg *Config) NewHTTPServer() (*HttpServer, error) {
 
 // 注册 API 路由。路由的路径和 HTTP 方法，严格遵循 REST 规范.
 func (cfg *Config) SetupRouter(engine *gin.Engine, store store.IStore) {
+	// 注册pprof路由
+	pprof.Register(engine)
+
 	// 注册 404 Handler.
 	engine.NoRoute(func(c *gin.Context) {
 		core.WriteResponse(c, errorx.ErrNotFound.WithMessage("Page not found"), nil)
