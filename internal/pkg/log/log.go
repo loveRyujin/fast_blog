@@ -1,9 +1,12 @@
 package log
 
 import (
+	"context"
 	"sync"
 	"time"
 
+	"github.com/loveRyujin/fast_blog/internal/pkg/contextx"
+	"github.com/loveRyujin/fast_blog/internal/pkg/known"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )
@@ -154,4 +157,31 @@ func Sync() {
 
 func (l *zapLogger) Sync() {
 	_ = l.z.Sync()
+}
+
+func With(ctx context.Context) Logger {
+	return def.With(ctx)
+}
+
+// With 返回一个新的 Logger 实例，且日志输出包含从上下文中提取的请求 ID 和用户 ID。
+func (l *zapLogger) With(ctx context.Context) Logger {
+	cl := l.clone()
+
+	extractorMap := map[string]func(ctx context.Context) string{
+		known.XRequestID: contextx.RequestID,
+		known.XUserID:    contextx.UserID,
+	}
+
+	for key, extractor := range extractorMap {
+		if value := extractor(ctx); value != "" {
+			cl.z = cl.z.With(zap.String(key, value))
+		}
+	}
+
+	return cl
+}
+
+func (l *zapLogger) clone() *zapLogger {
+	newLogger := *l
+	return &newLogger
 }
