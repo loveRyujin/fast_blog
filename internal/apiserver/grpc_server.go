@@ -5,6 +5,7 @@ import (
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	grpchandler "github.com/loveRyujin/fast_blog/internal/apiserver/handler/grpc"
+	mw "github.com/loveRyujin/fast_blog/internal/pkg/middleware/grpc"
 	"github.com/loveRyujin/fast_blog/internal/pkg/server"
 	apiv1 "github.com/loveRyujin/fast_blog/pkg/api/apiserver/v1"
 	"google.golang.org/grpc"
@@ -19,7 +20,12 @@ var _ server.Server = (*GRPCServer)(nil)
 
 // NewGRPCServerOr 启动一个GRPC服务或者GRPC-GATEWAY服务
 func (cfg *Config) NewGRPCServerOr() (*GRPCServer, error) {
-	var grpcServerOptions []grpc.ServerOption
+	grpcServerOptions := []grpc.ServerOption{
+		grpc.ChainUnaryInterceptor(
+			// 请求 ID 拦截器
+			mw.RequestIDInterceptor(),
+		),
+	}
 	grpcsrv, err := server.NewGRPCServerOr(
 		cfg.GRPCOptions,
 		grpcServerOptions,

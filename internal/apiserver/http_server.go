@@ -12,7 +12,7 @@ import (
 	"github.com/loveRyujin/fast_blog/internal/pkg/core"
 	"github.com/loveRyujin/fast_blog/internal/pkg/errorx"
 	"github.com/loveRyujin/fast_blog/internal/pkg/known"
-	mw "github.com/loveRyujin/fast_blog/internal/pkg/middleware"
+	mw "github.com/loveRyujin/fast_blog/internal/pkg/middleware/http"
 	"github.com/loveRyujin/fast_blog/internal/pkg/server"
 	"github.com/loveRyujin/fast_blog/pkg/token"
 )
