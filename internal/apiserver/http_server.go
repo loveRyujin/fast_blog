@@ -30,7 +30,7 @@ func (cfg *Config) NewHTTPServer() (*HttpServer, error) {
 	engine := gin.New()
 
 	// 注册全局中间件
-	middlewares := []gin.HandlerFunc{gin.Recovery(), mw.NoCache(), mw.Cors(), mw.RequestID()}
+	middlewares := []gin.HandlerFunc{gin.Recovery(), mw.NoCache(), mw.Cors(), mw.Secure(), mw.RequestID()}
 	engine.Use(middlewares...)
 
 	// 初始化数据库连接

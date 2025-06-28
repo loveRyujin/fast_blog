@@ -22,7 +22,7 @@ grpc:
   addr: 127.0.0.1:6666
 
 # 服务模式，可选值为 http、grpc、grpc-gateway
-server-mode: grpc-gateway
+server-mode: http
 # JWT 签发密钥
 jwt-key: Rtg8BPKNEf2mB4mgvKONGPZZQSaJWNLijxR42qRgq0iBb5
 # JWT Token 过期时间

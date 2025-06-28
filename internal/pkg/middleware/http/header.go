@@ -32,3 +32,17 @@ func Cors() gin.HandlerFunc {
 		}
 	}
 }
+
+// Secure 是一个 Gin 中间件，用于添加安全相关的 HTTP 头.
+func Secure() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		c.Header("Access-Control-Allow-Origin", "*")
+		c.Header("X-Frame-Options", "DENY")
+		c.Header("X-Content-Type-Options", "nosniff")
+		c.Header("X-XSS-Protection", "1; mode=block")
+		if c.Request.TLS != nil {
+			c.Header("Strict-Transport-Security", "max-age=31536000")
+		}
+		c.Next()
+	}
+}
