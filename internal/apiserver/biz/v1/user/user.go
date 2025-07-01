@@ -14,6 +14,7 @@ import (
 	"github.com/loveRyujin/fast_blog/internal/pkg/known"
 	"github.com/onexstack/onexstack/pkg/store/where"
 	"golang.org/x/sync/errgroup"
+	"google.golang.org/protobuf/types/known/timestamppb"
 
 	apiv1 "github.com/loveRyujin/fast_blog/pkg/api/apiserver/v1"
 	"github.com/loveRyujin/fast_blog/pkg/auth"
@@ -69,7 +70,7 @@ func (b *userBiz) Login(ctx context.Context, rq *apiv1.LoginRequest) (*apiv1.Log
 		return nil, errorx.ErrSignToken
 	}
 
-	return &apiv1.LoginResponse{Token: token, ExpireAt: expireAt}, nil
+	return &apiv1.LoginResponse{Token: token, ExpireAt: timestamppb.New(expireAt)}, nil
 }
 
 // RefreshToken 实现 UserExpansion 接口中的 RefreshToken 方法.
@@ -80,7 +81,7 @@ func (b *userBiz) RefreshToken(ctx context.Context, rq *apiv1.RefreshTokenReques
 		return nil, errorx.ErrSignToken.WithMessage(err.Error())
 	}
 
-	return &apiv1.RefreshTokenResponse{Token: token, ExpireAt: expireAt}, nil
+	return &apiv1.RefreshTokenResponse{Token: token, ExpireAt: timestamppb.New(expireAt)}, nil
 }
 
 // ChangePassword 实现UserExpansion 接口中的ChangePassword 方法.
