@@ -1,9 +1,3 @@
--- Copyright 2024 孔令飞 <colin404@foxmail.com>. All rights reserved.
--- Use of this source code is governed by a MIT style
--- license that can be found in the LICENSE file. The original repo for
--- this file is https://github.com/onexstack/miniblog. The professional
--- version of this repository is https://github.com/onexstack/onex.
-
 -- MariaDB dump 10.19-11.2.2-MariaDB, for debian-linux-gnu (x86_64)
 --
 -- Host: 10.37.91.93    Database: miniblog
@@ -22,14 +16,14 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Current Database: `miniblog`
+-- Current Database: `fastblog`
 --
 
-/*!40000 DROP DATABASE IF EXISTS `miniblog`*/;
+/*!40000 DROP DATABASE IF EXISTS `fastblog`*/;
 
-CREATE DATABASE /*!32312 IF NOT EXISTS*/ `miniblog` /*!40100 DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci */;
+CREATE DATABASE /*!32312 IF NOT EXISTS*/ `fastblog` /*!40100 DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci */;
 
-USE `miniblog`;
+USE `fastblog`;
 
 --
 -- Table structure for table `casbin_rule`
