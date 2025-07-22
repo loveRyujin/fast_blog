@@ -2,13 +2,13 @@ package post
 
 import (
 	"context"
-	"log/slog"
 
 	"github.com/jinzhu/copier"
 	"github.com/loveRyujin/fast_blog/internal/apiserver/model"
 	"github.com/loveRyujin/fast_blog/internal/apiserver/pkg/conversion"
 	"github.com/loveRyujin/fast_blog/internal/apiserver/store"
 	"github.com/loveRyujin/fast_blog/internal/pkg/contextx"
+	"github.com/loveRyujin/fast_blog/internal/pkg/log"
 	apiv1 "github.com/loveRyujin/fast_blog/pkg/api/apiserver/v1"
 	"github.com/onexstack/onexstack/pkg/store/where"
 )
@@ -55,7 +55,7 @@ func (b *postBiz) Create(ctx context.Context, rq *apiv1.CreatePostRequest) (*api
 
 // Update 实现 PostBiz 接口中的 Update 方法.
 func (b *postBiz) Update(ctx context.Context, rq *apiv1.UpdatePostRequest) (*apiv1.UpdatePostResponse, error) {
-	slog.Info("biz update request postID", "postID", rq.PostID)
+	log.With(ctx).Infow("biz update request postID", "postID", rq.PostID)
 	whr := where.F("userID", contextx.UserID(ctx), "postID", rq.PostID)
 	postM, err := b.store.Post().Get(ctx, whr)
 	if err != nil {

@@ -3,13 +3,13 @@ package store
 import (
 	"context"
 	"errors"
-	"log/slog"
 
 	"github.com/onexstack/onexstack/pkg/store/where"
 	"gorm.io/gorm"
 
 	"github.com/loveRyujin/fast_blog/internal/apiserver/model"
 	"github.com/loveRyujin/fast_blog/internal/pkg/errorx"
+	"github.com/loveRyujin/fast_blog/internal/pkg/log"
 )
 
 // UserStore 定义了 user 模块在 store 层所实现的方法.
@@ -42,7 +42,7 @@ func newUserStore(store *dataStore) *userStore {
 // Create 插入一条用户记录.
 func (s *userStore) Create(ctx context.Context, obj *model.User) error {
 	if err := s.store.DB(ctx).Create(&obj).Error; err != nil {
-		slog.Error("Failed to insert user into database", "err", err, "user", obj)
+		log.With(ctx).Errorw("Failed to insert user into database", "err", err, "user", obj)
 		return errorx.ErrDBWrite.WithMessage(err.Error())
 	}
 
@@ -52,7 +52,7 @@ func (s *userStore) Create(ctx context.Context, obj *model.User) error {
 // Update 更新用户数据库记录.
 func (s *userStore) Update(ctx context.Context, obj *model.User) error {
 	if err := s.store.DB(ctx).Save(obj).Error; err != nil {
-		slog.Error("Failed to update user in database", "err", err, "user", obj)
+		log.With(ctx).Errorw("Failed to update user in database", "err", err, "user", obj)
 		return errorx.ErrDBWrite.WithMessage(err.Error())
 	}
 
@@ -63,7 +63,7 @@ func (s *userStore) Update(ctx context.Context, obj *model.User) error {
 func (s *userStore) Delete(ctx context.Context, opts *where.Options) error {
 	err := s.store.DB(ctx, opts).Delete(new(model.User)).Error
 	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
-		slog.Error("Failed to delete user from database", "err", err, "conditions", opts)
+		log.With(ctx).Errorw("Failed to delete user from database", "err", err, "conditions", opts)
 		return errorx.ErrDBWrite.WithMessage(err.Error())
 	}
 
@@ -74,7 +74,7 @@ func (s *userStore) Delete(ctx context.Context, opts *where.Options) error {
 func (s *userStore) Get(ctx context.Context, opts *where.Options) (*model.User, error) {
 	var obj model.User
 	if err := s.store.DB(ctx, opts).First(&obj).Error; err != nil {
-		slog.Error("Failed to retrieve user from database", "err", err, "conditions", opts)
+		log.With(ctx).Errorw("Failed to retrieve user from database", "err", err, "conditions", opts)
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, errorx.ErrUserNotFound
 		}
@@ -88,7 +88,7 @@ func (s *userStore) Get(ctx context.Context, opts *where.Options) (*model.User, 
 func (s *userStore) List(ctx context.Context, opts *where.Options) (count int64, ret []*model.User, err error) {
 	err = s.store.DB(ctx, opts).Order("id desc").Find(&ret).Offset(-1).Limit(-1).Count(&count).Error
 	if err != nil {
-		slog.Error("Failed to list users from database", "err", err, "conditions", opts)
+		log.With(ctx).Errorw("Failed to list users from database", "err", err, "conditions", opts)
 		err = errorx.ErrDBRead.WithMessage(err.Error())
 	}
 	return

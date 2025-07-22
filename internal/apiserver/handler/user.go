@@ -1,17 +1,16 @@
 package handler
 
 import (
-	"log/slog"
-
 	"github.com/gin-gonic/gin"
 	"github.com/loveRyujin/fast_blog/internal/pkg/core"
 	"github.com/loveRyujin/fast_blog/internal/pkg/errorx"
+	"github.com/loveRyujin/fast_blog/internal/pkg/log"
 	v1 "github.com/loveRyujin/fast_blog/pkg/api/apiserver/v1"
 )
 
 // Login 用户登录
 func (h *Handler) Login(c *gin.Context) {
-	slog.Info("Login function called")
+	log.Infow("Login function called")
 
 	var request v1.LoginRequest
 	if err := c.ShouldBindJSON(&request); err != nil {
@@ -35,7 +34,7 @@ func (h *Handler) Login(c *gin.Context) {
 
 // RefreshToken 刷新token
 func (h *Handler) RefreshToken(c *gin.Context) {
-	slog.Info("Refresh token function called")
+	log.Infow("Refresh token function called")
 
 	var request v1.RefreshTokenRequest
 	if err := c.ShouldBindJSON(&request); err != nil {
@@ -58,7 +57,7 @@ func (h *Handler) RefreshToken(c *gin.Context) {
 }
 
 func (h *Handler) ChangePassword(c *gin.Context) {
-	slog.Info("Change user password function call")
+	log.Infow("Change user password function call")
 
 	var request v1.ChangePasswordRequest
 	if err := c.ShouldBindJSON(&request); err != nil {
@@ -82,7 +81,7 @@ func (h *Handler) ChangePassword(c *gin.Context) {
 
 // CreateUser 创建用户
 func (h *Handler) CreateUser(c *gin.Context) {
-	slog.Info("Create user function call")
+	log.Infow("Create user function call")
 
 	var request v1.CreateUserRequest
 	if err := c.ShouldBindJSON(&request); err != nil {
@@ -106,7 +105,7 @@ func (h *Handler) CreateUser(c *gin.Context) {
 
 // UpdateUser 更新用户信息.
 func (h *Handler) UpdateUser(c *gin.Context) {
-	slog.Info("Update user function called")
+	log.Infow("Update user function called")
 
 	var request v1.UpdateUserRequest
 	if err := c.ShouldBindJSON(&request); err != nil {
@@ -130,7 +129,7 @@ func (h *Handler) UpdateUser(c *gin.Context) {
 
 // DeleteUser 删除用户.
 func (h *Handler) DeleteUser(c *gin.Context) {
-	slog.Info("Delete user function called")
+	log.Infow("Delete user function called")
 
 	var request v1.DeleteUserRequest
 	if err := c.ShouldBindUri(&request); err != nil {
@@ -154,7 +153,7 @@ func (h *Handler) DeleteUser(c *gin.Context) {
 
 // GetUser 获取用户信息.
 func (h *Handler) GetUser(c *gin.Context) {
-	slog.Info("Get user function called")
+	log.Infow("Get user function called")
 
 	var request v1.GetUserRequest
 	if err := c.ShouldBindUri(&request); err != nil {
@@ -178,7 +177,7 @@ func (h *Handler) GetUser(c *gin.Context) {
 
 // ListUser 获取用户列表.
 func (h *Handler) ListUser(c *gin.Context) {
-	slog.Info("List user function called")
+	log.Infow("List user function called")
 
 	var request v1.ListUserRequest
 	if err := c.ShouldBindQuery(&request); err != nil {

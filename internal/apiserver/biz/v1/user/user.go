@@ -2,7 +2,6 @@ package user
 
 import (
 	"context"
-	"log/slog"
 	"sync"
 
 	"github.com/jinzhu/copier"
@@ -12,6 +11,7 @@ import (
 	"github.com/loveRyujin/fast_blog/internal/pkg/contextx"
 	"github.com/loveRyujin/fast_blog/internal/pkg/errorx"
 	"github.com/loveRyujin/fast_blog/internal/pkg/known"
+	"github.com/loveRyujin/fast_blog/internal/pkg/log"
 	"github.com/onexstack/onexstack/pkg/store/where"
 	"golang.org/x/sync/errgroup"
 	"google.golang.org/protobuf/types/known/timestamppb"
@@ -207,7 +207,7 @@ func (b *userBiz) List(ctx context.Context, rq *apiv1.ListUserRequest) (*apiv1.L
 	}
 
 	if err := eg.Wait(); err != nil {
-		slog.ErrorContext(ctx, "Failed to wait all function calls returned", "err", err)
+		log.With(ctx).Errorw("Failed to wait all function calls returned", "err", err)
 		return nil, err
 	}
 
@@ -217,7 +217,7 @@ func (b *userBiz) List(ctx context.Context, rq *apiv1.ListUserRequest) (*apiv1.L
 		users = append(users, user.(*apiv1.User))
 	}
 
-	slog.DebugContext(ctx, "Get users from backend storage", "count", len(users))
+	log.With(ctx).Debugw("Get users from backend storage", "count", len(users))
 
 	return &apiv1.ListUserResponse{TotalCount: count, Users: users}, nil
 }

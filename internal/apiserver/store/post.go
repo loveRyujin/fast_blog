@@ -3,13 +3,13 @@ package store
 import (
 	"context"
 	"errors"
-	"log/slog"
 
 	"github.com/onexstack/onexstack/pkg/store/where"
 	"gorm.io/gorm"
 
 	"github.com/loveRyujin/fast_blog/internal/apiserver/model"
 	"github.com/loveRyujin/fast_blog/internal/pkg/errorx"
+	"github.com/loveRyujin/fast_blog/internal/pkg/log"
 )
 
 // PostStore 定义了 post 模块在 store 层所实现的方法.
@@ -42,7 +42,7 @@ func newPostStore(store *dataStore) *postStore {
 // Create 插入一条帖子记录.
 func (s *postStore) Create(ctx context.Context, obj *model.Post) error {
 	if err := s.store.DB(ctx).Create(&obj).Error; err != nil {
-		slog.Error("Failed to insert post into database", "err", err, "post", obj)
+		log.With(ctx).Errorw("Failed to insert post into database", "err", err, "post", obj)
 		return errorx.ErrDBWrite.WithMessage(err.Error())
 	}
 
@@ -52,7 +52,7 @@ func (s *postStore) Create(ctx context.Context, obj *model.Post) error {
 // Update 更新帖子数据库记录.
 func (s *postStore) Update(ctx context.Context, obj *model.Post) error {
 	if err := s.store.DB(ctx).Save(obj).Error; err != nil {
-		slog.Error("Failed to update post in database", "err", err, "post", obj)
+		log.With(ctx).Errorw("Failed to update post in database", "err", err, "post", obj)
 		return errorx.ErrDBWrite.WithMessage(err.Error())
 	}
 
@@ -63,7 +63,7 @@ func (s *postStore) Update(ctx context.Context, obj *model.Post) error {
 func (s *postStore) Delete(ctx context.Context, opts *where.Options) error {
 	err := s.store.DB(ctx, opts).Delete(new(model.Post)).Error
 	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
-		slog.Error("Failed to delete post from database", "err", err, "conditions", opts)
+		log.With(ctx).Errorw("Failed to delete post from database", "err", err, "conditions", opts)
 		return errorx.ErrDBWrite.WithMessage(err.Error())
 	}
 
@@ -74,7 +74,7 @@ func (s *postStore) Delete(ctx context.Context, opts *where.Options) error {
 func (s *postStore) Get(ctx context.Context, opts *where.Options) (*model.Post, error) {
 	var obj model.Post
 	if err := s.store.DB(ctx, opts).First(&obj).Error; err != nil {
-		slog.Error("Failed to retrieve post from database", "err", err, "conditions", opts)
+		log.With(ctx).Errorw("Failed to retrieve post from database", "err", err, "conditions", opts)
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, errorx.ErrPostNotFound
 		}
@@ -88,7 +88,7 @@ func (s *postStore) Get(ctx context.Context, opts *where.Options) (*model.Post, 
 func (s *postStore) List(ctx context.Context, opts *where.Options) (count int64, ret []*model.Post, err error) {
 	err = s.store.DB(ctx, opts).Order("id desc").Find(&ret).Offset(-1).Limit(-1).Count(&count).Error
 	if err != nil {
-		slog.Error("Failed to list posts from database", "err", err, "conditions", opts)
+		log.With(ctx).Errorw("Failed to list posts from database", "err", err, "conditions", opts)
 		err = errorx.ErrDBRead.WithMessage(err.Error())
 	}
 	return

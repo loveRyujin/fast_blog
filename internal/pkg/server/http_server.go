@@ -3,7 +3,6 @@ package server
 import (
 	"context"
 	"errors"
-	"log/slog"
 	"net/http"
 	"os"
 
@@ -29,7 +28,7 @@ func (s *HTTPServer) Run() {
 	log.Infow("Start to listen the incoming request on http address", "protocol", protocolName(s.srv), "addr", s.srv.Addr)
 
 	if err := s.srv.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
-		slog.Error(err.Error())
+		log.Errorw(err.Error())
 		os.Exit(1)
 	}
 }
