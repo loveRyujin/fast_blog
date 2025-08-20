@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/loveRyujin/fast_blog/internal/pkg/errorx"
 	"github.com/onexstack/onexstack/pkg/errorsx"
 )
 
@@ -35,23 +36,30 @@ func HandleJSONRequest[T any, R any](c *gin.Context, handler Handler[T, R], vali
 func HandleRequest[T any, R any](c *gin.Context, binder Binder, handler Handler[T, R], validator ...Validator[T]) {
 	var req T
 
-	if err := binder(&req); err != nil {
+	if err := ReadRequest(c, binder, &req, validator...); err != nil {
 		WriteResponse(c, nil, err)
 		return
+	}
+
+	resp, err := handler(c.Request.Context(), &req)
+	WriteResponse(c, resp, err)
+}
+
+func ReadRequest[T any](c *gin.Context, binder Binder, request *T, validator ...Validator[T]) error {
+	if err := binder(request); err != nil {
+		return errorx.ErrBind.WithMessage(err.Error())
 	}
 
 	for _, validate := range validator {
 		if validate == nil {
 			continue
 		}
-		if err := validate(c.Request.Context(), &req); err != nil {
-			WriteResponse(c, nil, err)
-			return
+		if err := validate(c.Request.Context(), request); err != nil {
+			return err
 		}
 	}
 
-	resp, err := handler(c.Request.Context(), &req)
-	WriteResponse(c, resp, err)
+	return nil
 }
 
 // WriteResponse 是通用的响应函数.
