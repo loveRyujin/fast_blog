@@ -33,6 +33,14 @@ func HandleJSONRequest[T any, R any](c *gin.Context, handler Handler[T, R], vali
 	HandleRequest(c, c.ShouldBindJSON, handler, validator...)
 }
 
+func HandleQueryRequest[T any, R any](c *gin.Context, handler Handler[T, R], validator ...Validator[T]) {
+	HandleRequest(c, c.ShouldBindQuery, handler, validator...)
+}
+
+func HandleURIRequest[T any, R any](c *gin.Context, handler Handler[T, R], validator ...Validator[T]) {
+	HandleRequest(c, c.ShouldBindUri, handler, validator...)
+}
+
 func HandleRequest[T any, R any](c *gin.Context, binder Binder, handler Handler[T, R], validator ...Validator[T]) {
 	var req T
 
