@@ -55,12 +55,12 @@ func (cfg *Config) SetupRouter(engine *gin.Engine, store store.IStore) {
 
 	// 注册 404 Handler.
 	engine.NoRoute(func(c *gin.Context) {
-		core.WriteResponse(c, errorx.ErrNotFound.WithMessage("Page not found"), nil)
+		core.WriteResponse(c, nil, errorx.ErrNotFound.WithMessage("Page not found"))
 	})
 
 	// 注册 /healthz handler.
 	engine.GET("/healthz", func(c *gin.Context) {
-		core.WriteResponse(c, nil, gin.H{"status": "ok"})
+		core.WriteResponse(c, gin.H{"status": "ok"}, nil)
 	})
 
 	// 创建核心业务处理器

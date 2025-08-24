@@ -15,7 +15,7 @@ func Authn() gin.HandlerFunc {
 		// 解析 JWT Token
 		userID, err := token.ParseRequest(c)
 		if err != nil {
-			core.WriteResponse(c, errorx.ErrTokenInvalid, nil)
+			core.WriteResponse(c, nil, errorx.ErrTokenInvalid)
 			c.Abort()
 			return
 		}
