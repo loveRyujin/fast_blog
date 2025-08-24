@@ -24,6 +24,8 @@ func (cfg *Config) NewGRPCServerOr() (*GRPCServer, error) {
 		grpc.ChainUnaryInterceptor(
 			// 请求 ID 拦截器
 			mw.RequestIDInterceptor(),
+			// 模拟认证拦截器
+			mw.AuthnBypasswInterceptor(),
 		),
 	}
 	grpcsrv, err := server.NewGRPCServerOr(

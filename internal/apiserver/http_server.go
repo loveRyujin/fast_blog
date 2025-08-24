@@ -12,6 +12,7 @@ import (
 	"github.com/loveRyujin/fast_blog/internal/pkg/core"
 	"github.com/loveRyujin/fast_blog/internal/pkg/errorx"
 	"github.com/loveRyujin/fast_blog/internal/pkg/known"
+	"github.com/loveRyujin/fast_blog/internal/pkg/log"
 	mw "github.com/loveRyujin/fast_blog/internal/pkg/middleware/http"
 	"github.com/loveRyujin/fast_blog/internal/pkg/server"
 	"github.com/loveRyujin/fast_blog/pkg/token"
@@ -55,12 +56,13 @@ func (cfg *Config) SetupRouter(engine *gin.Engine, store store.IStore) {
 
 	// 注册 404 Handler.
 	engine.NoRoute(func(c *gin.Context) {
-		core.WriteResponse(c, errorx.ErrNotFound.WithMessage("Page not found"), nil)
+		core.WriteResponse(c, nil, errorx.ErrNotFound.WithMessage("Page not found"))
 	})
 
 	// 注册 /healthz handler.
 	engine.GET("/healthz", func(c *gin.Context) {
-		core.WriteResponse(c, nil, gin.H{"status": "ok"})
+		log.Infow("Receive health check request")
+		core.WriteResponse(c, gin.H{"status": "ok"}, nil)
 	})
 
 	// 创建核心业务处理器
