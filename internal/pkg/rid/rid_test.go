@@ -34,9 +34,11 @@ func TestResourceID_New(t *testing.T) {
 func BenchmarkResourceID_New(b *testing.B) {
 	// 性能测试
 	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
+	var i uint64
+	for b.Loop() {
 		userID := rid.UserID
-		_ = userID.New(uint64(i))
+		_ = userID.New(i)
+		i++
 	}
 }
 

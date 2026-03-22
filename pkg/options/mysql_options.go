@@ -22,7 +22,7 @@ type MysqlOptions struct {
 	Database              string        `json:"database" mapstructure:"database"`
 	MaxIdleConnections    int           `json:"max-idle-connections,omitempty" mapstructure:"max-idle-connections,omitempty"`
 	MaxOpenConnections    int           `json:"max-open-connections,omitempty" mapstructure:"max-open-connections,omitempty"`
-	MaxConnectionLifeTime time.Duration `json:"max-connection-lifetime,omitempty" mapstructure:"max-connection-life-time"`
+	MaxConnectionLifeTime time.Duration `json:"max-connection-lifetime,omitzero" mapstructure:"max-connection-life-time"`
 }
 
 func NewMysqlOptions() *MysqlOptions {

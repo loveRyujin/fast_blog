@@ -43,7 +43,7 @@ func Init(key string, identityKey string, expiration time.Duration) {
 // Parse 使用指定的密钥 key 解析 token，解析成功返回 token 上下文，否则报错.
 func Parse(tokenString string, key string) (string, error) {
 	// 解析 token
-	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (any, error) {
 		// 确保 token 加密算法是预期的加密算法
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, jwt.ErrSignatureInvalid

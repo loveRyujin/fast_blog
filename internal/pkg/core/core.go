@@ -26,7 +26,7 @@ type ErrorResponse struct {
 	// 错误详情的描述信息
 	Message string `json:"message,omitempty"`
 	// 附带的元数据信息
-	Metadata map[string]string `json:"metadata,omitempty"`
+	Metadata map[string]string `json:"metadata,omitzero"`
 }
 
 func HandleJSONRequest[T any, R any](c *gin.Context, handler Handler[T, R], validator ...Validator[T]) {
